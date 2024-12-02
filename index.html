@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOFILINA CHOKERS</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://secure.mlstatic.com/sdk/javascript/v1/mercadopago.js"></script>
+</head>
+<body>
+    <!-- Carrito en la parte superior derecha, redirige a la sección del carrito -->
+    <div class="cart-icon-container">
+        <a href="#cart" id="cart-icon">
+            🛒 <span id="cart-count">0</span>
+        </a>
+    </div>
+
+    <header class="header-with-logo">
+        <img src="images/logo.png" alt="Logo Sofilina Chokers" class="logo">
+        <h1>Bienvenidos a SOFILINA CHOKERS</h1>
+    </header>
+    <main>
+        <section class="product-grid">
+            <div class="product-card" data-name="Collar Modelo 1" data-price="20">
+                <img src="images/collar1.jpg" alt="Collar Modelo 1">
+                <h2>Collar Modelo 1</h2>
+                <p>$20</p>
+                <button class="add-to-cart">Agregar al carrito</button>
+            </div>
+            <div class="product-card" data-name="Collar Modelo 2" data-price="25">
+                <img src="images/collar2.jpg" alt="Collar Modelo 2">
+                <h2>Collar Modelo 2</h2>
+                <p>$25</p>
+                <button class="add-to-cart">Agregar al carrito</button>
+            </div>
+        </section>
+        <section class="cart" id="cart">
+            <h2>Carrito de Compras</h2>
+            <div class="cart-items"></div>
+            <p class="cart-total">Total: $<span id="cart-total">0</span></p>
+            <button class="clear-cart">Vaciar Carrito</button>
+
+            <!-- Botón de pago MercadoPago -->
+            <button id="checkout-btn">Pagar con MercadoPago</button>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 SOFILINA CHOKERS</p>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // MercadoPago Checkout en el Frontend
+        const mp = new MercadoPago('TU_ACCESS_TOKEN', {
+            locale: 'es-AR'
+        });
+
+        // Simular la creación de una preferencia de pago para el carrito
+        function createPreference() {
+            // Usamos los productos del carrito para simular la preferencia
+            const items = [
+                { title: 'Collar Modelo 1', unit_price: 20, quantity: 1 },
+                { title: 'Collar Modelo 2', unit_price: 25, quantity: 1 }
+            ];
+
+            return {
+                items: items
+            };
+        }
+
+        // Función para redirigir al usuario a MercadoPago
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+            const preference = createPreference();
+
+            mp.checkout({
+                preference: preference
+            }).then(function(response) {
+                window.location.href = response.body.init_point; // Redirigir a MercadoPago
+            }).catch(function(error) {
+                alert('Error al procesar el pago');
+            });
+        });
+    </script>
+</body>
+</html>
